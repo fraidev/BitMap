@@ -1,4 +1,4 @@
-namespace Test
+namespace test
 {
     public class PermissionServiceTests
     {

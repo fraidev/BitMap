@@ -1,8 +1,7 @@
-using System;
 using BitMap;
 using NUnit.Framework;
 
-namespace Test
+namespace test
 {
     public class BitMapTests
     {
