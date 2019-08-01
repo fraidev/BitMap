@@ -31,25 +31,13 @@ namespace Test
         }
         
         [Test]
-        public void ble()
+        public void ConstructorWithBoolArrayMustWorks()
         {
-            const byte b = 21;
-            _sut = new BitMapCollection(b);
+            _sut = new BitMapCollection(new []{true, false, true, false, true, false});
             
-            Assert.AreEqual("101010", _sut.ToStringLiteral());
-            Assert.AreEqual("21", _sut.ToString());
+            Assert.AreEqual("101010", _sut.ToString());
         }
         
-        [Test]
-        public void ToStringLiteralMustReturnLiteralBinaryCode()
-        {
-            _sut.Add(1);
-            _sut.Add(3);
-            _sut.Add(5);
-            
-            Assert.AreEqual("101010", _sut.ToStringLiteral());
-        }
-
         [Test]
         public void ToStringMustReturnStringWithBinaryCode()
         {
@@ -57,18 +45,29 @@ namespace Test
             _sut.Add(3);
             _sut.Add(5);
             
-            Assert.AreEqual("21", _sut.ToString());
+            Assert.AreEqual("101010", _sut.ToString());
         }
         
 
         [Test]
-        public void ToBinaryMustReturnBinaryCode()
+        public void ToBoolArrayMustReturnABoolArray()
         {
             _sut.Add(1);
             _sut.Add(3);
             _sut.Add(5);
             
-            Assert.AreEqual(21, _sut.ToBinary());
+            Assert.AreEqual(new []{true, false, true, false, true, false}, _sut.ToBoolArray());
+        }
+
+        [Test]
+        public void ToHexMustWork()
+        {
+            _sut.Add(1);
+            _sut.Add(3);
+            _sut.Add(5);
+
+            Assert.AreEqual("2A", _sut.ToHex());
+            Assert.AreNotEqual("2a", _sut.ToHex());
         }
     }
 }

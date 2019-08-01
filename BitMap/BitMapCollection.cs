@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -6,7 +7,8 @@ namespace BitMap
 {
     public class BitMapCollection
     {
-        private bool[] _indexes = new bool[2];
+        //TODO Index class
+        private bool[] _indexes = new bool[1];
         private int Capacity => _indexes.Length;
 
         public BitMapCollection()
@@ -14,9 +16,15 @@ namespace BitMap
             
         }
 
-        public BitMapCollection(byte b)
+        public BitMapCollection(string b)
         {
-            _indexes = ConvertByteToBoolArray(b);
+            //TODO ONLY STRINGS WITH 0 AND 1
+            throw new NotImplementedException();
+        }
+        
+        public BitMapCollection(IEnumerable<bool> b)
+        {
+            _indexes = b.Reverse().ToArray();
         }
 
         public void Add(int value)
@@ -39,68 +47,38 @@ namespace BitMap
         {
             return value < Capacity && _indexes[value];
         }
-
-        public string ToStringLiteral()
+        
+        public override string ToString()
         {
             var sb = new StringBuilder();
             foreach (var i in _indexes.ToList()) sb.Append(i ? "1" : "0");
             return ReverseString(sb.ToString());
-        }
-        
-        public override string ToString()
-        {
-
-            return ConvertBoolArrayToByte(_indexes).ToString();
-        }
-
-        public byte ToBinary()
-        {
-            return ConvertBoolArrayToByte(_indexes);
         }
 
         public bool[] ToBoolArray()
         {
             return ToString().Select(c => c == '1').ToArray();
         }
+
+        public string ToHex()
+        {
+            return BinaryStringToHexString(ToString());
+        }
+        
+        //TODO Extensions
+        private static string BinaryStringToHexString(string binary)
+        {
+            string strHex = Convert.ToInt32(binary,2).ToString("X");
+            return strHex;
+        }
         
         
-        private string ReverseString(string s)
+        private static string ReverseString(string s)
         {
             var charArray = s.ToCharArray();
             Array.Reverse( charArray );
             return new string( charArray );
         }
-        private static byte ConvertBoolArrayToByte(bool[] source)
-        {
-            byte result = 0;
-            // This assumes the array never contains more than 8 elements!
-            var index = 8 - source.Length;
-
-            // Loop through the array
-            foreach (var b in source)
-            {
-                // if the element is 'true' set the bit at that position
-                if (b)
-                    result |= (byte)(1 << (7 - index));
-                index++;
-            }
-
-            return result;
-        }
-        private static bool[] ConvertByteToBoolArray(byte b)
-        {
-            // prepare the return result
-            var result = new bool[8];
-
-            // check each bit in the byte. if 1 set to true, if 0 set to false
-            for (var i = 0; i < 8; i++)
-                result[i] = (b & (1 << i)) != 0;
-
-            // reverse the array
-            Array.Reverse(result);
-
-            return result;
-        }
-
+        
     }
 }
