@@ -9,6 +9,16 @@ namespace BitMap
         private bool[] _indexes = new bool[2];
         private int Capacity => _indexes.Length;
 
+        public BitMapCollection()
+        {
+            
+        }
+
+        public BitMapCollection(byte b)
+        {
+            _indexes = ConvertByteToBoolArray(b);
+        }
+
         public void Add(int value)
         {
             EnsureCapacity(value + 1);
@@ -29,6 +39,30 @@ namespace BitMap
         {
             return value < Capacity && _indexes[value];
         }
+
+        public string ToStringLiteral()
+        {
+            var sb = new StringBuilder();
+            foreach (var i in _indexes.ToList()) sb.Append(i ? "1" : "0");
+            return ReverseString(sb.ToString());
+        }
+        
+        public override string ToString()
+        {
+
+            return ConvertBoolArrayToByte(_indexes).ToString();
+        }
+
+        public byte ToBinary()
+        {
+            return ConvertBoolArrayToByte(_indexes);
+        }
+
+        public bool[] ToBoolArray()
+        {
+            return ToString().Select(c => c == '1').ToArray();
+        }
+        
         
         private string ReverseString(string s)
         {
@@ -48,7 +82,6 @@ namespace BitMap
                 // if the element is 'true' set the bit at that position
                 if (b)
                     result |= (byte)(1 << (7 - index));
-
                 index++;
             }
 
@@ -69,18 +102,5 @@ namespace BitMap
             return result;
         }
 
-        public override string ToString()
-        {
-//            var sb = new StringBuilder();
-//            foreach (var i in _indexes.ToList()) sb.Append(i ? "1" : "0");
-//            return ReverseString(sb.ToString());
-
-            return ConvertBoolArrayToByte(_indexes).ToString();
-        }
-
-        public byte ToBinary()
-        {
-            return ConvertBoolArrayToByte(_indexes);
-        }
     }
 }
